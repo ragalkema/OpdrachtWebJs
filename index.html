@@ -9,13 +9,6 @@
   <body>
     <div class="app-shell">
       <header class="topbar">
-        <div>
-          <p class="eyebrow">Eindopdracht Javascript</p>
-          <h1>Future Color</h1>
-          <p class="subtitle">
-            MVC-startopzet voor de verfmeng simulator met error handling.
-          </p>
-        </div>
 
         <nav class="page-nav" aria-label="Hoofdnavigatie">
           <button type="button" class="nav-button is-active" data-page-target="simulator">
@@ -37,7 +30,7 @@
               </button>
             </div>
 
-            <form class="stack" data-js="ingredient-form" novalidate>
+            <form class="stack ingredient-form" data-js="ingredient-form" novalidate>
               <label>
                 Naam
                 <input
@@ -49,9 +42,9 @@
                 />
               </label>
 
-              <div class="form-row">
+              <div class="form-row ingredient-meta-row">
                 <label>
-                  Minimale mengtijd (ms)
+                  Min mengtijd (ms)
                   <input type="number" name="mixTime" min="100" step="100" value="1000" required />
                 </label>
 
@@ -101,7 +94,6 @@
               <h2>Ingrediënten</h2>
               <span class="counter" data-js="ingredient-count">0</span>
             </div>
-            <p class="hint">Sleep een ingrediënt naar een pot met dezelfde mengsnelheid.</p>
             <div class="ingredient-list" data-js="ingredient-list"></div>
           </section>
         </aside>
@@ -109,12 +101,12 @@
         <section class="content">
           <section class="page is-active" data-page="simulator">
             <div class="panel weather-panel">
-              <div>
+              <div class="weather-intro">
                 <p class="eyebrow">Weer en vestiging</p>
                 <h2>Weerregels voor mengtijd</h2>
               </div>
 
-              <form class="weather-form" data-js="weather-form">
+              <form class="weather-form weather-inline-form" data-js="weather-form">
                 <label>
                   Stad
                   <input type="text" name="city" value="Amsterdam" required />
@@ -185,14 +177,6 @@
               </section>
             </div>
 
-            <section class="panel output-panel">
-              <div class="section-heading">
-                <h2>Output en meldingen</h2>
-                <span class="hint">Gebruik dit voor successen, waarschuwingen en fouten.</span>
-              </div>
-              <div class="status-banner" data-js="status-banner" aria-live="polite"></div>
-              <div class="output-list" data-js="output-list"></div>
-            </section>
           </section>
 
           <section class="page" data-page="color-test">

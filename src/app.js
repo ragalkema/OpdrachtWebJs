@@ -9,5 +9,4 @@ const controller = new AppController(state, view);
 
 handleAsyncError(() => controller.init(), {
   fallbackMessage: "De applicatie kon niet correct opstarten.",
-  onError: (error) => view.showStatus(error.message, "error"),
 });

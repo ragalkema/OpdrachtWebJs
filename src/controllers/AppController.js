@@ -1,15 +1,20 @@
-import { APP_CONFIG } from "../config/appConfig.js";
 import { WEATHER_CONFIG } from "../config/weatherConfig.js";
+import { bindAppControllerEvents } from "./bindAppControllerEvents.js";
+import { createDemoStateSnapshot } from "./demoStateFactory.js";
+import {
+  calculateMixDuration,
+  createOrUpdateMixedPaint,
+  getIngredientsInPot,
+  getPotNumber,
+  invalidateMixedPaint,
+} from "./mixingState.js";
 import { Ingredient } from "../models/Ingredient.js";
 import { MixingMachine } from "../models/MixingMachine.js";
 import { Pot } from "../models/Pot.js";
 import { WeatherService } from "../services/WeatherService.js";
 import { AppError } from "../utils/AppError.js";
-import {
-  averageRgbStrings,
-  getTriadicRgbStrings,
-} from "../utils/colorUtils.js";
-import { handleAsyncError, withErrorBoundary } from "../utils/errorHandler.js";
+import { getTriadicRgbStrings } from "../utils/colorUtils.js";
+import { withErrorBoundary } from "../utils/errorHandler.js";
 
 export class AppController {
   constructor(state, view) {
@@ -21,81 +26,9 @@ export class AppController {
 
   async init() {
     this.seedDemoData();
-    this.bindEvents();
+    bindAppControllerEvents(this);
     this.render();
     await this.loadWeather(this.state.weather.city);
-  }
-
-  bindEvents() {
-    this.view.bindPageNavigation((page) => {
-      this.state.activePage = page;
-      this.view.setActivePage(page);
-    });
-
-    this.view.bindHallNavigation((hallId) => {
-      this.state.activeHallId = hallId;
-      this.renderHalls();
-    });
-
-    this.view.bindIngredientCreate((formData) => {
-      withErrorBoundary(() => this.createIngredient(formData), this.view);
-    });
-
-    this.view.bindRandomIngredient(() => {
-      withErrorBoundary(() => this.createRandomIngredient(), this.view);
-    });
-
-    this.view.bindPotCreate(() => {
-      withErrorBoundary(() => this.createPot(), this.view);
-    });
-
-    this.view.bindMachineCreate((formData) => {
-      withErrorBoundary(() => this.createMachine(formData), this.view);
-    });
-
-    this.view.bindGridGenerate(({ rows, columns }) => {
-      withErrorBoundary(() => {
-        this.state.setGrid(rows, columns);
-        this.renderGrid();
-        this.view.showStatus(`Grid van ${columns}x${rows} is aangemaakt.`, "info");
-      }, this.view);
-    });
-
-    this.view.bindGridReset(() => {
-      withErrorBoundary(() => {
-        this.state.setGrid(APP_CONFIG.defaultGrid.rows, APP_CONFIG.defaultGrid.columns);
-        this.renderGrid();
-        this.view.showStatus("Het kleurentest grid is gereset.", "info");
-      }, this.view);
-    });
-
-    this.view.bindWeatherSearch((city) => {
-      handleAsyncError(() => this.loadWeather(city), {
-        fallbackMessage: "Het weer kon niet worden opgehaald.",
-        onError: (error) => this.view.showStatus(error.message, "error"),
-      });
-    });
-
-    this.view.bindDragAndDrop({
-      onIngredientDrop: ({ ingredientId, potId }) => {
-        withErrorBoundary(() => this.placeIngredientInPot(ingredientId, potId), this.view);
-      },
-      onPotDrop: ({ potId, machineId }) => {
-        withErrorBoundary(() => this.startMachineRun(machineId, potId), this.view);
-      },
-    });
-
-    this.view.bindPaletteSelect((paintId) => {
-      withErrorBoundary(() => this.selectPaint(paintId), this.view);
-    });
-
-    this.view.bindPaletteAdvice((paintId) => {
-      withErrorBoundary(() => this.showPaintAdvice(paintId), this.view);
-    });
-
-    this.view.bindGridCellClick((cellIndex) => {
-      withErrorBoundary(() => this.paintGridCell(cellIndex), this.view);
-    });
   }
 
   createIngredient(formData) {
@@ -158,7 +91,7 @@ export class AppController {
       throw new AppError("Je kunt geen ingredient toevoegen tijdens het mengen.", "POT_BUSY");
     }
 
-    const potIngredients = this.getIngredientsInPot(pot);
+    const potIngredients = getIngredientsInPot(this.state, pot);
 
     if (potIngredients.length > 0 && potIngredients[0].mixSpeed !== ingredient.mixSpeed) {
       throw new AppError(
@@ -169,7 +102,7 @@ export class AppController {
 
     ingredient.potId = pot.id;
     pot.ingredientIds.push(ingredient.id);
-    this.invalidateMixedPaint(pot);
+    invalidateMixedPaint(this.state, pot);
     this.renderIngredients();
     this.renderPots();
     this.renderPalette();
@@ -180,7 +113,7 @@ export class AppController {
     const machine = this.state.getMachineById(machineId);
     const hall = this.state.getHallByMachineId(machineId);
     const pot = this.state.getPotById(potId);
-    const ingredients = this.getIngredientsInPot(pot);
+    const ingredients = getIngredientsInPot(this.state, pot);
 
     if (machine.active) {
       throw new AppError("Deze machine is al bezig.", "MACHINE_ALREADY_ACTIVE");
@@ -215,7 +148,7 @@ export class AppController {
       );
     }
 
-    const duration = this.calculateMixDuration(ingredients, machine);
+    const duration = calculateMixDuration(ingredients, machine, this.state.weather);
 
     pot.status = "mixing";
     pot.assignedMachineId = machine.id;
@@ -227,7 +160,7 @@ export class AppController {
     this.renderPots();
     this.renderHalls();
     this.view.showStatus(
-      `Machine gestart voor pot ${this.getPotNumber(pot.id)}. Mengtijd: ${duration} ms.`,
+      `Machine gestart voor pot ${getPotNumber(this.state, pot.id)}. Mengtijd: ${duration} ms.`,
       "info"
     );
 
@@ -242,7 +175,7 @@ export class AppController {
     const machine = this.state.getMachineById(machineId);
     const hall = this.state.getHallByMachineId(machineId);
     const pot = this.state.getPotById(potId);
-    const paint = this.createOrUpdateMixedPaint(pot);
+    const paint = createOrUpdateMixedPaint(this.state, pot);
 
     pot.status = "mixed";
     pot.assignedMachineId = null;
@@ -264,46 +197,9 @@ export class AppController {
     this.renderPalette();
     this.renderGrid();
     this.view.showStatus(
-      `Pot ${this.getPotNumber(pot.id)} is klaar en beschikbaar als "${paint.name}".`,
+      `Pot ${getPotNumber(this.state, pot.id)} is klaar en beschikbaar als "${paint.name}".`,
       "success"
     );
-  }
-
-  createOrUpdateMixedPaint(pot) {
-    const ingredients = this.getIngredientsInPot(pot);
-    const paintId = pot.mixedPaintId ?? crypto.randomUUID();
-    const paint = {
-      id: paintId,
-      name: `Mix pot ${this.getPotNumber(pot.id)}`,
-      colorValue: averageRgbStrings(ingredients.map((ingredient) => ingredient.colorValue)),
-      sourcePotId: pot.id,
-      mixSpeed: ingredients[0].mixSpeed,
-    };
-    const existingIndex = this.state.mixedPaints.findIndex((item) => item.id === paint.id);
-
-    if (existingIndex >= 0) {
-      this.state.mixedPaints.splice(existingIndex, 1, paint);
-    } else {
-      this.state.mixedPaints.unshift(paint);
-    }
-
-    return paint;
-  }
-
-  invalidateMixedPaint(pot) {
-    if (!pot.mixedPaintId) {
-      pot.status = "ready";
-      return;
-    }
-
-    this.state.mixedPaints = this.state.mixedPaints.filter((item) => item.id !== pot.mixedPaintId);
-
-    if (this.state.selectedPaintId === pot.mixedPaintId) {
-      this.state.selectedPaintId = null;
-    }
-
-    pot.mixedPaintId = null;
-    pot.status = "ready";
   }
 
   selectPaint(paintId) {
@@ -351,119 +247,7 @@ export class AppController {
   }
 
   seedDemoData() {
-    const ingredients = [
-      new Ingredient({
-        name: "Citrus Seed",
-        mixTime: 1200,
-        mixSpeed: 1,
-        colorMode: "rgb",
-        colorValue: "rgb(163, 220, 69)",
-        texture: "glad",
-        shape: "triangle",
-      }),
-      new Ingredient({
-        name: "Ocean Dust",
-        mixTime: 900,
-        mixSpeed: 2,
-        colorMode: "rgb",
-        colorValue: "rgb(66, 162, 245)",
-        texture: "korrel",
-        shape: "circle",
-      }),
-      new Ingredient({
-        name: "Amber Base",
-        mixTime: 1400,
-        mixSpeed: 2,
-        colorMode: "rgb",
-        colorValue: "rgb(240, 145, 48)",
-        texture: "grove-korrel",
-        shape: "square",
-      }),
-      new Ingredient({
-        name: "Mango Tone",
-        mixTime: 1000,
-        mixSpeed: 2,
-        colorMode: "rgb",
-        colorValue: "rgb(252, 189, 72)",
-        texture: "glad",
-        shape: "diamond",
-      }),
-      new Ingredient({
-        name: "Rose Drop",
-        mixTime: 1100,
-        mixSpeed: 1,
-        colorMode: "rgb",
-        colorValue: "rgb(230, 57, 131)",
-        texture: "slijmerig",
-        shape: "circle",
-      }),
-      new Ingredient({
-        name: "Mint Soft",
-        mixTime: 1300,
-        mixSpeed: 1,
-        colorMode: "rgb",
-        colorValue: "rgb(111, 214, 169)",
-        texture: "glad",
-        shape: "triangle",
-      }),
-    ];
-
-    const readyPot = new Pot({ id: crypto.randomUUID() });
-    const mixedPot = new Pot({
-      id: crypto.randomUUID(),
-      status: "mixed",
-      mixedPaintId: crypto.randomUUID(),
-    });
-
-    ingredients[2].potId = readyPot.id;
-    ingredients[3].potId = readyPot.id;
-    ingredients[4].potId = mixedPot.id;
-    ingredients[5].potId = mixedPot.id;
-
-    readyPot.ingredientIds = [ingredients[2].id, ingredients[3].id];
-    mixedPot.ingredientIds = [ingredients[4].id, ingredients[5].id];
-
-    const mixedPaint = {
-      id: mixedPot.mixedPaintId,
-      name: `Mix pot 2`,
-      colorValue: averageRgbStrings([ingredients[4].colorValue, ingredients[5].colorValue]),
-      sourcePotId: mixedPot.id,
-      mixSpeed: 1,
-    };
-
-    this.state.ingredients = ingredients;
-    this.state.pots = [readyPot, mixedPot];
-    this.state.mixedPaints = [mixedPaint];
-    this.state.selectedPaintId = mixedPaint.id;
-    this.state.halls = APP_CONFIG.halls.map((hall, index) => ({
-      ...hall,
-      outputPotIds: index === 0 ? [mixedPot.id] : [],
-      machines: [
-        new MixingMachine({
-          id: crypto.randomUUID(),
-          speed: index + 1,
-          baseDuration: 1000 + index * 300,
-        }),
-      ],
-    }));
-  }
-
-  getIngredientsInPot(pot) {
-    return pot.ingredientIds.map((id) => this.state.getIngredientById(id));
-  }
-
-  getPotNumber(potId) {
-    return this.state.pots.findIndex((pot) => pot.id === potId) + 1;
-  }
-
-  calculateMixDuration(ingredients, machine) {
-    const highestIngredientTime = Math.max(
-      ...ingredients.map((ingredient) => ingredient.mixTime)
-    );
-
-    return Math.round(
-      Math.max(highestIngredientTime, machine.baseDuration) * this.state.weather.mixMultiplier
-    );
+    Object.assign(this.state, createDemoStateSnapshot());
   }
 
   render() {

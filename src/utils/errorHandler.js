@@ -5,8 +5,7 @@ export function withErrorBoundary(task, view) {
     return task();
   } catch (error) {
     const handledError = normalizeError(error);
-    console.error(handledError);
-    view.showStatus(handledError.message, "error");
+    view.showError(handledError);
     return null;
   }
 }
@@ -16,7 +15,10 @@ export async function handleAsyncError(task, { onError, fallbackMessage }) {
     return await task();
   } catch (error) {
     const handledError = normalizeError(error, fallbackMessage);
-    console.error(handledError);
+    console.error(`[ERROR] ${handledError.message}`, handledError);
+    if (handledError.cause) {
+      console.error("[ERROR_CAUSE]", handledError.cause);
+    }
 
     if (typeof onError === "function") {
       onError(handledError);

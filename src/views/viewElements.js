@@ -1,0 +1,27 @@
+export function createViewElements(documentRef) {
+  return {
+    ingredientForm: documentRef.querySelector('[data-js="ingredient-form"]'),
+    ingredientList: documentRef.querySelector('[data-js="ingredient-list"]'),
+    ingredientCount: documentRef.querySelector('[data-js="ingredient-count"]'),
+    randomIngredientButton: documentRef.querySelector('[data-js="generate-random-ingredient"]'),
+    potButton: documentRef.querySelector('[data-js="create-pot"]'),
+    potList: documentRef.querySelector('[data-js="pot-list"]'),
+    machineForm: documentRef.querySelector('[data-js="machine-form"]'),
+    hallStage: documentRef.querySelector('[data-js="hall-stage"]'),
+    pageButtons: [...documentRef.querySelectorAll("[data-page-target]")],
+    pages: [...documentRef.querySelectorAll("[data-page]")],
+    hallButtons: [...documentRef.querySelectorAll("[data-hall-target]")],
+    weatherForm: documentRef.querySelector('[data-js="weather-form"]'),
+    weatherLocation: documentRef.querySelector('[data-js="weather-location"]'),
+    weatherCondition: documentRef.querySelector('[data-js="weather-condition"]'),
+    weatherTemperature: documentRef.querySelector('[data-js="weather-temperature"]'),
+    weatherMultiplier: documentRef.querySelector('[data-js="weather-multiplier"]'),
+    gridForm: documentRef.querySelector('[data-js="grid-form"]'),
+    gridBoard: documentRef.querySelector('[data-js="grid-board"]'),
+    resetGridButton: documentRef.querySelector('[data-js="reset-grid"]'),
+    paletteList: documentRef.querySelector('[data-js="palette-list"]'),
+    selectedPaint: documentRef.querySelector('[data-js="selected-paint"]'),
+    triadicModal: documentRef.querySelector('[data-js="triadic-modal"]'),
+    triadicSwatches: documentRef.querySelector('[data-js="triadic-swatches"]'),
+  };
+}
