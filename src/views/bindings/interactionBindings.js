@@ -91,6 +91,18 @@ export function bindPaletteSelect(elements, handler) {
   });
 }
 
+export function bindPotRemoval(elements, handler) {
+  elements.potList.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-pot-remove]");
+
+    if (button) {
+      event.preventDefault();
+      event.stopPropagation();
+      handler(button.dataset.potRemove);
+    }
+  });
+}
+
 export function bindPaletteAdvice(elements, handler) {
   elements.paletteList.addEventListener("click", (event) => {
     const button = event.target.closest("[data-palette-advice]");

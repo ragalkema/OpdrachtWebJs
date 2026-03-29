@@ -65,6 +65,10 @@ export function bindAppControllerEvents(controller) {
     withErrorBoundary(() => controller.selectPaint(paintId), view);
   });
 
+  view.bindPotRemoval((potId) => {
+    withErrorBoundary(() => controller.removePotContents(potId), view);
+  });
+
   view.bindPaletteAdvice((paintId) => {
     withErrorBoundary(() => controller.showPaintAdvice(paintId), view);
   });

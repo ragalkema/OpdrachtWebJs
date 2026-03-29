@@ -35,11 +35,17 @@ export function invalidateMixedPaint(state, pot) {
     return;
   }
 
-  state.mixedPaints = state.mixedPaints.filter((item) => item.id !== pot.mixedPaintId);
+  const removedPaintId = pot.mixedPaintId;
 
-  if (state.selectedPaintId === pot.mixedPaintId) {
+  state.mixedPaints = state.mixedPaints.filter((item) => item.id !== removedPaintId);
+
+  if (state.selectedPaintId === removedPaintId) {
     state.selectedPaintId = null;
   }
+
+  state.grid.cells = state.grid.cells.map((paintId) =>
+    paintId === removedPaintId ? null : paintId
+  );
 
   pot.mixedPaintId = null;
   pot.status = "ready";

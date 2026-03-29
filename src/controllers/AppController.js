@@ -109,6 +109,38 @@ export class AppController {
     this.view.showStatus(`"${ingredient.name}" is in een pot geplaatst.`, "success");
   }
 
+  removePotContents(potId) {
+    const pot = this.state.getPotById(potId);
+
+    if (pot.status === "mixing") {
+      throw new AppError("Je kunt een pot niet leeghalen terwijl hij gemengd wordt.", "POT_BUSY");
+    }
+
+    if (pot.ingredientIds.length === 0) {
+      return;
+    }
+
+    const potIngredients = getIngredientsInPot(this.state, pot);
+
+    potIngredients.forEach((ingredient) => {
+      ingredient.potId = null;
+    });
+
+    pot.ingredientIds = [];
+    pot.assignedMachineId = null;
+    this.state.halls.forEach((hall) => {
+      hall.outputPotIds = hall.outputPotIds.filter((id) => id !== pot.id);
+    });
+
+    invalidateMixedPaint(this.state, pot);
+    this.renderIngredients();
+    this.renderPots();
+    this.renderHalls();
+    this.renderPalette();
+    this.renderGrid();
+    this.view.showStatus(`Pot ${getPotNumber(this.state, pot.id)} is weer leeg gemaakt.`, "info");
+  }
+
   startMachineRun(machineId, potId) {
     const machine = this.state.getMachineById(machineId);
     const hall = this.state.getHallByMachineId(machineId);

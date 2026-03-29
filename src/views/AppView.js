@@ -14,6 +14,7 @@ import {
   bindGridCellClick,
   bindPaletteAdvice,
   bindPaletteSelect,
+  bindPotRemoval,
 } from "./bindings/interactionBindings.js";
 import {
   renderGrid,
@@ -79,6 +80,10 @@ export class AppView {
 
   bindPaletteSelect(handler) {
     bindPaletteSelect(this.elements, handler);
+  }
+
+  bindPotRemoval(handler) {
+    bindPotRemoval(this.elements, handler);
   }
 
   bindPaletteAdvice(handler) {

@@ -35,11 +35,13 @@ export function renderIngredients(elements, ingredients) {
     .map(
       (ingredient) => `
         <article class="ingredient-card" draggable="true" data-drag-type="ingredient" data-drag-id="${ingredient.id}">
-          <div class="shape shape-${ingredient.shape} texture-${ingredient.texture}" style="--ingredient-color: ${ingredient.colorValue}"></div>
-          <div>
-            <h3>${ingredient.name}</h3>
-            <p>${ingredient.mixTime} ms | snelheid ${ingredient.mixSpeed}</p>
-            <p>${ingredient.texture} | ${ingredient.colorValue}</p>
+          <div class="ingredient-card-body drag-surface">
+            <div class="shape shape-${ingredient.shape} texture-${ingredient.texture}" style="--ingredient-color: ${ingredient.colorValue}"></div>
+            <div>
+              <h3>${ingredient.name}</h3>
+              <p>${ingredient.mixTime} ms | snelheid ${ingredient.mixSpeed}</p>
+              <p>${ingredient.texture} | ${ingredient.colorValue}</p>
+            </div>
           </div>
         </article>
       `
@@ -48,32 +50,41 @@ export function renderIngredients(elements, ingredients) {
 }
 
 export function renderPots(elements, pots, ingredients, mixedPaints) {
-  if (pots.length === 0) {
+  const workspacePots = pots.filter((pot) => pot.status !== "mixed");
+
+  if (workspacePots.length === 0) {
     elements.potList.innerHTML =
       '<p class="empty-state">Nog geen potten. Maak eerst een lege pot aan.</p>';
     return;
   }
 
-  elements.potList.innerHTML = pots
+  elements.potList.innerHTML = workspacePots
     .map((pot, index) => {
       const potIngredients = pot.ingredientIds
         .map((id) => ingredients.find((ingredient) => ingredient.id === id))
         .filter(Boolean);
       const paint = mixedPaints.find((item) => item.id === pot.mixedPaintId);
       const isDraggable = potIngredients.length > 0 && pot.status === "ready";
+      const canClear = potIngredients.length > 0 && pot.status !== "mixing";
       const dragAttributes = isDraggable
         ? `draggable="true" data-drag-type="pot" data-drag-id="${pot.id}"`
         : "";
 
       return `
         <article class="pot-card pot-card-${pot.status}" data-pot-id="${pot.id}" ${dragAttributes}>
-          <div class="pot-visual ${pot.status === "mixed" ? "is-mixed" : ""}"></div>
-          <div>
-            <h3>Pot ${index + 1}</h3>
-            <p>Status: ${getPotStatusLabel(pot.status)}</p>
-            <p>Snelheid: ${potIngredients[0]?.mixSpeed ?? "-"}</p>
-            <p>${potIngredients.length ? potIngredients.map((item) => item.name).join(", ") : "Nog leeg"}</p>
-            ${paint ? `<p class="paint-badge" style="--badge-color: ${paint.colorValue}">${paint.name}</p>` : ""}
+          <div class="card-toolbar">
+            ${isDraggable ? '<span class="drag-chip" aria-hidden="true">Sleep</span>' : '<span class="drag-chip is-muted" aria-hidden="true">Vast</span>'}
+            ${canClear ? `<button type="button" class="card-remove-button" data-pot-remove="${pot.id}" aria-label="Maak pot ${index + 1} leeg">x</button>` : '<span class="card-remove-placeholder" aria-hidden="true"></span>'}
+          </div>
+          <div class="pot-card-body drag-surface">
+            <div class="pot-visual ${pot.status === "mixed" ? "is-mixed" : ""}"></div>
+            <div>
+              <h3>Pot ${index + 1}</h3>
+              <p>Status: ${getPotStatusLabel(pot.status)}</p>
+              <p>Snelheid: ${potIngredients[0]?.mixSpeed ?? "-"}</p>
+              <p>${potIngredients.length ? potIngredients.map((item) => item.name).join(", ") : "Nog leeg"}</p>
+              ${paint ? `<p class="paint-badge" style="--badge-color: ${paint.colorValue}">${paint.name}</p>` : ""}
+            </div>
           </div>
         </article>
       `;
