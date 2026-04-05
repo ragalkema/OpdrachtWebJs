@@ -35,6 +35,10 @@ export function renderIngredients(elements, ingredients) {
     .map(
       (ingredient) => `
         <article class="ingredient-card" draggable="true" data-drag-type="ingredient" data-drag-id="${ingredient.id}">
+          <div class="card-toolbar">
+            <span class="drag-chip" aria-hidden="true">Sleep</span>
+            <button type="button" class="card-remove-button" data-ingredient-remove="${ingredient.id}" aria-label="Verwijder ingredient ${ingredient.name}">x</button>
+          </div>
           <div class="ingredient-card-body drag-surface">
             <div class="shape shape-${ingredient.shape} texture-${ingredient.texture}" style="--ingredient-color: ${ingredient.colorValue}"></div>
             <div>
@@ -146,8 +150,11 @@ export function renderHalls(elements, halls, activeHallId, pots, ingredients, mi
             return `
               <article class="machine-card ${machine.active ? "is-active" : ""}" data-machine-id="${machine.id}">
                 <div class="machine-top">
-                  <span>Machine ${index + 1}</span>
-                  <strong>x${machine.speed}</strong>
+                  <div class="machine-meta">
+                    <span>Machine ${index + 1}</span>
+                    <strong>x${machine.speed}</strong>
+                  </div>
+                  <button type="button" class="card-remove-button" data-machine-remove="${machine.id}" aria-label="Verwijder machine ${index + 1}">x</button>
                 </div>
                 <div class="machine-body">
                   <div class="spinner ${machine.active ? "is-running" : ""}"></div>

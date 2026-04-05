@@ -46,6 +46,21 @@ export class AppController {
     this.view.showStatus(`Willekeurig ingredient "${ingredient.name}" is aangemaakt.`, "info");
   }
 
+  removeIngredient(ingredientId) {
+    const ingredient = this.state.getIngredientById(ingredientId);
+
+    if (ingredient.potId) {
+      throw new AppError(
+        "Je kunt een ingredient niet verwijderen terwijl het in een pot zit.",
+        "INGREDIENT_IN_POT"
+      );
+    }
+
+    this.state.ingredients = this.state.ingredients.filter((item) => item.id !== ingredientId);
+    this.renderIngredients();
+    this.view.showStatus(`Ingredient "${ingredient.name}" is verwijderd.`, "info");
+  }
+
   createPot() {
     const pot = new Pot({ id: crypto.randomUUID() });
     this.state.pots.unshift(pot);
@@ -66,6 +81,11 @@ export class AppController {
     }
 
     const hall = this.state.getActiveHall();
+
+    if (hall.machines.length >= 4) {
+      throw new AppError("Per hal mogen maximaal 4 machines staan.", "MACHINE_LIMIT_REACHED");
+    }
+
     hall.machines.unshift(
       new MixingMachine({
         id: crypto.randomUUID(),
@@ -77,6 +97,20 @@ export class AppController {
     this.renderHalls();
     this.view.resetMachineForm();
     this.view.showStatus(`Nieuwe machine toegevoegd in ${hall.name}.`, "success");
+  }
+
+  removeMachine(machineId) {
+    const machine = this.state.getMachineById(machineId);
+
+    if (machine.active) {
+      throw new AppError("Je kunt een actieve machine niet verwijderen.", "MACHINE_ACTIVE_REMOVE");
+    }
+
+    const hall = this.state.getHallByMachineId(machineId);
+    hall.machines = hall.machines.filter((item) => item.id !== machineId);
+    this.mixTimers.delete(machineId);
+    this.renderHalls();
+    this.view.showStatus(`Machine verwijderd uit ${hall.name}.`, "info");
   }
 
   placeIngredientInPot(ingredientId, potId) {
@@ -197,7 +231,7 @@ export class AppController {
     );
 
     const timerId = setTimeout(() => {
-      withErrorBoundary(() => this.finishMachineRun(machine.id, pot.id), this.view);
+      withErrorBoundary(() => this.finishMachineRun(machine.id, pot.id));
     }, duration);
 
     this.mixTimers.set(machine.id, timerId);
@@ -314,10 +348,6 @@ export class AppController {
 
   renderPalette() {
     this.view.renderPalette(this.state.mixedPaints, this.state.selectedPaintId);
-    const selectedPaint = this.state.selectedPaintId
-      ? this.state.getPaintById(this.state.selectedPaintId)
-      : null;
-    this.view.renderSelectedPaint(selectedPaint);
   }
 
   renderGrid() {

@@ -1,24 +1,28 @@
 import { AppError } from "./AppError.js";
 
-export function withErrorBoundary(task, view) {
+function reportError(error) {
+  console.error(`[ERROR] ${error.message}`, error);
+  if (error.cause) {
+    console.error("[ERROR_CAUSE]", error.cause);
+  }
+}
+
+export function withErrorBoundary(task) {
   try {
     return task();
   } catch (error) {
     const handledError = normalizeError(error);
-    view.showError(handledError);
+    reportError(handledError);
     return null;
   }
 }
 
-export async function handleAsyncError(task, { onError, fallbackMessage }) {
+export async function handleAsyncError(task, { onError, fallbackMessage } = {}) {
   try {
     return await task();
   } catch (error) {
     const handledError = normalizeError(error, fallbackMessage);
-    console.error(`[ERROR] ${handledError.message}`, handledError);
-    if (handledError.cause) {
-      console.error("[ERROR_CAUSE]", handledError.cause);
-    }
+    reportError(handledError);
 
     if (typeof onError === "function") {
       onError(handledError);

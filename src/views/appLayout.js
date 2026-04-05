@@ -153,6 +153,10 @@ const APP_LAYOUT = `
                   Machinesnelheid
                   <input type="number" name="speed" min="1" max="5" value="1" required />
                 </label>
+                <label>
+                  Minimale machinetijd (ms)
+                  <input type="number" name="baseDuration" min="100" step="100" value="1000" required />
+                </label>
                 <button type="submit" class="secondary-button">+ Machine</button>
               </form>
 
@@ -187,7 +191,6 @@ const APP_LAYOUT = `
               </form>
 
               <div class="palette-panel">
-                <div class="selected-paint" data-js="selected-paint">Geen verf geselecteerd</div>
                 <h3>Gemengde verf</h3>
                 <div class="palette" data-js="palette-list"></div>
               </div>

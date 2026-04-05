@@ -103,6 +103,30 @@ export function bindPotRemoval(elements, handler) {
   });
 }
 
+export function bindIngredientRemoval(elements, handler) {
+  elements.ingredientList.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-ingredient-remove]");
+
+    if (button) {
+      event.preventDefault();
+      event.stopPropagation();
+      handler(button.dataset.ingredientRemove);
+    }
+  });
+}
+
+export function bindMachineRemoval(elements, handler) {
+  elements.hallStage.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-machine-remove]");
+
+    if (button) {
+      event.preventDefault();
+      event.stopPropagation();
+      handler(button.dataset.machineRemove);
+    }
+  });
+}
+
 export function bindPaletteAdvice(elements, handler) {
   elements.paletteList.addEventListener("click", (event) => {
     const button = event.target.closest("[data-palette-advice]");

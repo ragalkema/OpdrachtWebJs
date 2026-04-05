@@ -15,19 +15,27 @@ export function bindAppControllerEvents(controller) {
   });
 
   view.bindIngredientCreate((formData) => {
-    withErrorBoundary(() => controller.createIngredient(formData), view);
+    withErrorBoundary(() => controller.createIngredient(formData));
   });
 
   view.bindRandomIngredient(() => {
-    withErrorBoundary(() => controller.createRandomIngredient(), view);
+    withErrorBoundary(() => controller.createRandomIngredient());
+  });
+
+  view.bindIngredientRemoval((ingredientId) => {
+    withErrorBoundary(() => controller.removeIngredient(ingredientId));
   });
 
   view.bindPotCreate(() => {
-    withErrorBoundary(() => controller.createPot(), view);
+    withErrorBoundary(() => controller.createPot());
   });
 
   view.bindMachineCreate((formData) => {
-    withErrorBoundary(() => controller.createMachine(formData), view);
+    withErrorBoundary(() => controller.createMachine(formData));
+  });
+
+  view.bindMachineRemoval((machineId) => {
+    withErrorBoundary(() => controller.removeMachine(machineId));
   });
 
   view.bindGridGenerate(({ rows, columns }) => {
@@ -35,7 +43,7 @@ export function bindAppControllerEvents(controller) {
       state.setGrid(rows, columns);
       controller.renderGrid();
       view.showStatus(`Grid van ${columns}x${rows} is aangemaakt.`, "info");
-    }, view);
+    });
   });
 
   view.bindGridReset(() => {
@@ -43,7 +51,7 @@ export function bindAppControllerEvents(controller) {
       state.setGrid(APP_CONFIG.defaultGrid.rows, APP_CONFIG.defaultGrid.columns);
       controller.renderGrid();
       view.showStatus("Het kleurentest grid is gereset.", "info");
-    }, view);
+    });
   });
 
   view.bindWeatherSearch((city) => {
@@ -54,26 +62,26 @@ export function bindAppControllerEvents(controller) {
 
   view.bindDragAndDrop({
     onIngredientDrop: ({ ingredientId, potId }) => {
-      withErrorBoundary(() => controller.placeIngredientInPot(ingredientId, potId), view);
+      withErrorBoundary(() => controller.placeIngredientInPot(ingredientId, potId));
     },
     onPotDrop: ({ potId, machineId }) => {
-      withErrorBoundary(() => controller.startMachineRun(machineId, potId), view);
+      withErrorBoundary(() => controller.startMachineRun(machineId, potId));
     },
   });
 
   view.bindPaletteSelect((paintId) => {
-    withErrorBoundary(() => controller.selectPaint(paintId), view);
+    withErrorBoundary(() => controller.selectPaint(paintId));
   });
 
   view.bindPotRemoval((potId) => {
-    withErrorBoundary(() => controller.removePotContents(potId), view);
+    withErrorBoundary(() => controller.removePotContents(potId));
   });
 
   view.bindPaletteAdvice((paintId) => {
-    withErrorBoundary(() => controller.showPaintAdvice(paintId), view);
+    withErrorBoundary(() => controller.showPaintAdvice(paintId));
   });
 
   view.bindGridCellClick((cellIndex) => {
-    withErrorBoundary(() => controller.paintGridCell(cellIndex), view);
+    withErrorBoundary(() => controller.paintGridCell(cellIndex));
   });
 }

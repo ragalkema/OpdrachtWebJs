@@ -12,6 +12,8 @@ import {
 import {
   bindDragAndDrop,
   bindGridCellClick,
+  bindIngredientRemoval,
+  bindMachineRemoval,
   bindPaletteAdvice,
   bindPaletteSelect,
   bindPotRemoval,
@@ -19,7 +21,6 @@ import {
 import {
   renderGrid,
   renderPalette,
-  renderSelectedPaint,
   showTriadicColors,
 } from "./renderers/colorTestRenderer.js";
 import {
@@ -30,7 +31,7 @@ import {
   setActivePage,
 } from "./renderers/simulatorRenderer.js";
 import { createViewElements } from "./viewElements.js";
-import { showError, showStatus } from "./viewLogger.js";
+import { showStatus } from "./viewLogger.js";
 
 export class AppView {
   constructor(documentRef) {
@@ -86,6 +87,14 @@ export class AppView {
     bindPotRemoval(this.elements, handler);
   }
 
+  bindIngredientRemoval(handler) {
+    bindIngredientRemoval(this.elements, handler);
+  }
+
+  bindMachineRemoval(handler) {
+    bindMachineRemoval(this.elements, handler);
+  }
+
   bindPaletteAdvice(handler) {
     bindPaletteAdvice(this.elements, handler);
   }
@@ -114,10 +123,6 @@ export class AppView {
     renderPalette(this.elements, items, selectedPaintId);
   }
 
-  renderSelectedPaint(paint) {
-    renderSelectedPaint(this.elements, paint);
-  }
-
   renderWeather(weather) {
     renderWeather(this.elements, weather);
   }
@@ -128,10 +133,6 @@ export class AppView {
 
   showStatus(message, tone = "info") {
     showStatus(message, tone);
-  }
-
-  showError(error) {
-    showError(error);
   }
 
   showTriadicColors(basePaint, triadicColors) {

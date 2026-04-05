@@ -33,11 +33,16 @@ p {
 
 h1 {
   margin-bottom: 0.4rem;
-  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
 }
 
-h2,
+h2 {
+  font-size: 1.3rem;
+  margin-bottom: var(--gap-sm);
+}
+
 h3 {
+  font-size: 1.05rem;
   margin-bottom: var(--gap-sm);
 }
 
@@ -68,23 +73,9 @@ button:hover {
   transform: translateY(-1px);
 }
 
-.eyebrow {
-  margin: 0 0 0.3rem;
-  color: var(--muted);
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-}
-
-.subtitle,
 .counter,
 .hint {
   color: var(--muted);
-}
-
-.subtitle {
-  margin-bottom: 0;
-  max-width: 48rem;
 }
 
 .counter,

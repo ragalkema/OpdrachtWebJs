@@ -20,7 +20,6 @@ export function createViewElements(documentRef) {
     gridBoard: documentRef.querySelector('[data-js="grid-board"]'),
     resetGridButton: documentRef.querySelector('[data-js="reset-grid"]'),
     paletteList: documentRef.querySelector('[data-js="palette-list"]'),
-    selectedPaint: documentRef.querySelector('[data-js="selected-paint"]'),
     triadicModal: documentRef.querySelector('[data-js="triadic-modal"]'),
     triadicSwatches: documentRef.querySelector('[data-js="triadic-swatches"]'),
   };

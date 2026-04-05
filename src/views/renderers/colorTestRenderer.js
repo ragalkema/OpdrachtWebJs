@@ -35,12 +35,6 @@ export function renderPalette(elements, items, selectedPaintId) {
     .join("");
 }
 
-export function renderSelectedPaint(elements, paint) {
-  elements.selectedPaint.textContent = paint
-    ? `Geselecteerd: ${paint.name} (${paint.colorValue})`
-    : "Geen verf geselecteerd";
-}
-
 export function renderGrid(elements, grid, mixedPaints) {
   const paintMap = new Map(mixedPaints.map((paint) => [paint.id, paint]));
   elements.gridBoard.style.setProperty("--grid-columns", grid.columns);

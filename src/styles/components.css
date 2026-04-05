@@ -43,7 +43,6 @@
 .ingredient-card p,
 .pot-card p,
 .machine-card p,
-.output-item p,
 .palette-copy span,
 .triadic-item span,
 .weather-card span {
@@ -320,6 +319,11 @@
   font-size: 0.82rem;
 }
 
+.machine-meta {
+  display: grid;
+  gap: 0.15rem;
+}
+
 .machine-card p {
   font-size: 0.75rem;
   line-height: 1.3;
@@ -385,16 +389,6 @@
 
 .weather-card {
   min-height: 100%;
-}
-
-.selected-paint {
-  margin-bottom: var(--gap-2xl);
-  padding: 0.7rem var(--gap-xl);
-  color: var(--blue);
-  border-radius: var(--radius-sm);
-  background: rgba(45, 112, 151, 0.08);
-  font-size: 0.88rem;
-  font-weight: 700;
 }
 
 .palette-card {
