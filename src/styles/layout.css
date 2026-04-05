@@ -1,0 +1,229 @@
+.app-shell {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: var(--gap-xl);
+  width: min(1760px, calc(100% - 0.8rem));
+  height: 100vh;
+  height: 100dvh;
+  margin: 0 auto;
+  padding: var(--gap-xl) 0;
+  overflow: hidden;
+}
+
+.layout,
+.workspace-grid,
+.color-test-layout {
+  display: grid;
+  min-height: 0;
+}
+
+.layout {
+  grid-template-columns: 360px minmax(0, 1fr);
+  gap: var(--gap-xl);
+}
+
+.workspace-grid {
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: var(--gap-xl);
+}
+
+.color-test-layout {
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: var(--gap-2xl);
+}
+
+.sidebar,
+.content,
+.stack,
+.page,
+.color-test-sidebar {
+  display: grid;
+}
+
+.sidebar {
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: var(--gap-2xl);
+  align-content: stretch;
+  overflow: hidden;
+}
+
+.content,
+.page,
+.drop-zone,
+.hall-stage,
+.sidebar > section,
+.workspace-grid > .panel,
+.color-test-sidebar,
+.color-test-canvas {
+  min-height: 0;
+}
+
+.page {
+  display: none;
+  gap: var(--gap-2xl);
+}
+
+.page.is-active {
+  display: grid;
+  overflow: auto;
+  scrollbar-gutter: stable;
+  padding-right: var(--scroll-pad);
+}
+
+.page[data-page="simulator"].is-active {
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+.page[data-page="color-test"].is-active {
+  grid-template-rows: minmax(0, 1fr);
+}
+
+.stack,
+.color-test-sidebar {
+  gap: var(--gap-xl);
+}
+
+.topbar,
+.section-heading,
+.hall-toolbar,
+.hall-header,
+.machine-top,
+.card-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.section-heading,
+.form-row,
+.hall-toolbar,
+.hall-header,
+.weather-form,
+.page-nav,
+.toggle-group,
+.machine-top,
+.palette-actions,
+.card-toolbar {
+  display: flex;
+  gap: var(--gap-2xl);
+}
+
+.topbar {
+  gap: var(--gap-2xl);
+}
+
+.form-row,
+.page-nav,
+.toggle-group,
+.palette-actions {
+  flex-wrap: wrap;
+}
+
+.panel {
+  min-height: 0;
+  padding: var(--gap-2xl);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(14px);
+}
+
+.ingredient-form {
+  gap: var(--gap-lg);
+}
+
+.ingredient-meta-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(110px, 0.9fr);
+  gap: var(--gap-md);
+  align-items: end;
+}
+
+.ingredient-meta-row label,
+.weather-intro,
+.weather-card,
+.weather-inline-form label {
+  min-width: 0;
+}
+
+.weather-inline-form {
+  align-items: end;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+}
+
+.weather-inline-form label {
+  flex: 1 1 auto;
+}
+
+.weather-inline-form button {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.ingredient-list,
+.pot-list,
+.palette,
+.machine-lane,
+.color-test-canvas {
+  min-height: 0;
+  overflow: auto;
+  scrollbar-gutter: stable;
+  padding-right: var(--scroll-pad);
+}
+
+.ingredient-list,
+.pot-list,
+.palette {
+  display: grid;
+  gap: var(--gap-lg);
+}
+
+.palette {
+  align-content: start;
+}
+
+.weather-panel {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) minmax(220px, 320px) minmax(0, 2.2fr);
+  gap: var(--gap-xl);
+  align-items: end;
+}
+
+.weather-cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--gap-md);
+  min-width: 0;
+}
+
+.hall-form {
+  gap: var(--gap-lg);
+  align-items: end;
+}
+
+.hall-form label {
+  min-width: 140px;
+}
+
+.sidebar > section:last-child {
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+}
+
+.workspace-grid > .panel:first-child {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+.workspace-grid > .panel:last-child {
+  display: grid;
+  grid-template-rows: auto auto auto minmax(0, 1fr);
+}
+
+.palette-panel {
+  display: grid;
+  grid-template-rows: auto auto auto minmax(0, 1fr);
+  min-height: 0;
+}
