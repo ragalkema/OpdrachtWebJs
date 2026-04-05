@@ -1,0 +1,134 @@
+.ingredient-card,
+.pot-card,
+.weather-card,
+.palette-card,
+.output-pot,
+.palette-copy,
+.triadic-item {
+  display: grid;
+}
+
+.ingredient-card,
+.pot-card,
+.weather-card,
+.palette-card,
+.output-pot {
+  gap: 0.55rem;
+  padding: var(--gap-lg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-card);
+}
+
+.ingredient-card,
+.pot-card {
+  position: relative;
+}
+
+.ingredient-card h3,
+.pot-card h3,
+.weather-card strong,
+.palette-copy strong,
+.output-pot strong {
+  font-size: 0.98rem;
+}
+
+.ingredient-card p,
+.pot-card p,
+.machine-card p,
+.palette-copy span,
+.triadic-item span,
+.weather-card span {
+  margin-bottom: 0;
+  font-size: 0.82rem;
+}
+
+.weather-card span,
+.palette-copy span,
+.triadic-item span {
+  color: var(--muted);
+}
+
+[data-drag-type] {
+  cursor: grab;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+}
+
+[data-drag-type] * {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+[data-drag-type]:active {
+  cursor: grabbing;
+}
+
+.drag-surface {
+  pointer-events: none;
+}
+
+.paint-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0;
+  padding: 0.35rem 0.7rem;
+  border-radius: var(--pill-radius);
+  background: rgba(255, 255, 255, 0.86);
+}
+
+.paint-badge::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--badge-color);
+}
+
+.drag-chip,
+.card-remove-button,
+.card-remove-placeholder {
+  width: 26px;
+  height: 26px;
+  border-radius: var(--pill-radius);
+}
+
+.drag-chip,
+.card-remove-placeholder {
+  display: inline-grid;
+  place-items: center;
+}
+
+.drag-chip {
+  width: auto;
+  min-width: 46px;
+  padding: 0.2rem 0.45rem;
+  color: var(--muted);
+  border: 1px dashed var(--line-soft);
+  background: rgba(255, 255, 255, 0.72);
+  font-size: 0.67rem;
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.drag-chip.is-muted {
+  opacity: 0.65;
+}
+
+.card-remove-button {
+  display: inline-grid;
+  place-items: center;
+  padding: 0;
+  color: var(--danger);
+  border: 1px solid rgba(179, 59, 59, 0.18);
+  background: rgba(179, 59, 59, 0.12);
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.card-toolbar {
+  width: 100%;
+  gap: var(--gap-sm);
+}

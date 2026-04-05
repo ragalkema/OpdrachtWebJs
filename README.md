@@ -26,7 +26,13 @@ FutureColor/
     |   |-- AppController.js
     |   |-- bindAppControllerEvents.js
     |   |-- demoStateFactory.js
-    |   `-- mixingState.js
+    |   |-- mixingState.js
+    |   `-- appController/
+    |       |-- colorTestActions.js
+    |       |-- ingredientActions.js
+    |       |-- machineActions.js
+    |       |-- renderActions.js
+    |       `-- weatherActions.js
     |-- models/
     |   |-- AppState.js
     |   |-- Ingredient.js
@@ -92,15 +98,12 @@ Configuratie die losstaat van de domeinlogica.
 De controllerlaag koppelt state, domeinregels en view aan elkaar.
 
 `AppController.js`  
-Bevat de hoofdlogica van de applicatie, zoals:
+Is nu vooral een dunne orchestrator. Deze klasse:
 
-- initialiseren van demo-data
-- ingredienten, potten en machines aanmaken
-- potten vullen
-- mengruns starten en afronden
-- gemengde verf selecteren
-- grid invullen
-- weerdata laden
+- beheert gedeelde dependencies zoals `state`, `view`, `weatherService` en `mixTimers`
+- bindt events via `bindAppControllerEvents.js`
+- roept kleinere action-modules aan
+- houdt de publieke API van de controller stabiel voor de rest van de app
 
 `bindAppControllerEvents.js`  
 Verbindt alle UI-events met de juiste controller-acties.
@@ -116,6 +119,40 @@ Helperfuncties voor menglogica, zoals:
 - gemengde verf aanmaken of vernieuwen
 - gemengde verf ongeldig maken
 - definitieve mengduur berekenen
+
+### `src/controllers/appController/`
+
+Hier staat de opgesplitste implementatie van de controllerlogica per domein.
+
+`ingredientActions.js`
+
+- ingredienten aanmaken
+- willekeurige ingredienten genereren
+- ingredienten verwijderen
+- potten vullen
+
+`machineActions.js`
+
+- potten aanmaken
+- machines aanmaken en verwijderen
+- potten leegmaken
+- mengruns starten en afronden
+
+`colorTestActions.js`
+
+- verf selecteren
+- triadic advies tonen
+- gridcellen inkleuren
+
+`weatherActions.js`
+
+- demo-state seeden
+- weerdata laden en toepassen
+
+`renderActions.js`
+
+- complete UI renderen
+- losse rendercalls voor ingredienten, potten, hallen, palette en grid
 
 ## `src/models/`
 
@@ -155,7 +192,7 @@ Bevat de markup-template voor de applicatie-layout.
 Verzamelt DOM-referenties op één centrale plek.
 
 `viewLogger.js`  
-Toont status- en foutmeldingen in de interface.
+Stuurt status- en foutmeldingen door naar de console.
 
 ### `src/views/bindings/`
 
@@ -169,6 +206,8 @@ UI-eventbindingen.
 
 `interactionBindings.js`
 - drag-and-drop
+- ingredienten verwijderen
+- machines verwijderen
 - palette-acties
 - pot leegmaken
 - gridinteractie
