@@ -1,0 +1,8 @@
+@import "./components/shared.css";
+@import "./components/ingredients.css";
+@import "./components/pots.css";
+@import "./components/halls.css";
+@import "./components/weather.css";
+@import "./components/palette.css";
+@import "./components/grid.css";
+@import "./components/modal.css";

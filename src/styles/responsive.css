@@ -1,0 +1,82 @@
+@media (max-width: 1080px) {
+  body {
+    overflow: auto;
+  }
+
+  .app-shell {
+    height: auto;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow: visible;
+  }
+
+  .layout,
+  .workspace-grid,
+  .color-test-layout,
+  .weather-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .pot-list,
+  .machine-lane {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  }
+
+  .pot-card,
+  .machine-card {
+    width: auto;
+  }
+
+  .sidebar,
+  .page[data-page="simulator"].is-active,
+  .workspace-grid > .panel:first-child,
+  .workspace-grid > .panel:last-child,
+  .color-test-sidebar {
+    grid-template-rows: auto;
+  }
+
+  .weather-panel {
+    align-items: stretch;
+  }
+
+  .weather-inline-form {
+    flex-wrap: wrap;
+  }
+
+  .weather-cards {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  }
+
+  .ingredient-list,
+  .pot-list,
+  .palette,
+  .hall-stage,
+  .machine-lane,
+  .page.is-active,
+  .color-test-canvas {
+    overflow: visible;
+    padding-right: 0;
+  }
+}
+
+@media (max-width: 840px) {
+  .ingredient-meta-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .app-shell {
+    width: min(100% - 1rem, 100%);
+    padding-top: var(--gap-lg);
+  }
+
+  .topbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .panel {
+    padding: var(--gap-xl);
+  }
+}

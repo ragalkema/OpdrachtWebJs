@@ -1,0 +1,55 @@
+.ingredient-card-body {
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  gap: 0.55rem;
+  align-items: center;
+}
+
+.shape {
+  width: 44px;
+  height: 44px;
+  border: 3px solid rgba(0, 0, 0, 0.14);
+  background: var(--ingredient-color);
+}
+
+.shape-square {
+  border-radius: var(--radius-sm);
+}
+
+.shape-circle {
+  border-radius: 50%;
+}
+
+.shape-diamond {
+  border-radius: var(--radius-xs);
+  transform: rotate(45deg);
+}
+
+.shape-triangle {
+  width: 0;
+  height: 0;
+  border-right: 24px solid transparent;
+  border-bottom: 44px solid var(--ingredient-color);
+  border-left: 24px solid transparent;
+  background: transparent;
+}
+
+.texture-korrel {
+  box-shadow: inset 0 0 0 8px rgba(255, 255, 255, 0.18);
+}
+
+.texture-grove-korrel {
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.34) 15%, transparent 16%);
+  background-size: 12px 12px;
+}
+
+.texture-glad {
+  box-shadow: inset 0 -14px 18px rgba(255, 255, 255, 0.24);
+}
+
+.texture-slijmerig {
+  box-shadow:
+    inset 0 12px 20px rgba(255, 255, 255, 0.22),
+    0 6px 16px rgba(0, 0, 0, 0.08);
+  filter: saturate(1.1);
+}

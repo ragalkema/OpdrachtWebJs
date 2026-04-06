@@ -1,0 +1,33 @@
+:root {
+  --bg: #f5efe4;
+  --panel: rgba(255, 250, 241, 0.92);
+  --surface: rgba(255, 255, 255, 0.84);
+  --surface-card: rgba(255, 255, 255, 0.76);
+  --surface-card-strong: rgba(255, 255, 255, 0.82);
+  --ink: #1c2520;
+  --muted: #5f645f;
+  --line: rgba(28, 37, 32, 0.12);
+  --line-soft: rgba(28, 37, 32, 0.18);
+  --line-strong: rgba(28, 37, 32, 0.2);
+  --accent: #ff7a00;
+  --accent-soft: #ffe6cc;
+  --green: #4d8f5a;
+  --blue: #2d7097;
+  --danger: #b33b3b;
+  --shadow: 0 18px 45px rgba(33, 24, 6, 0.12);
+  --radius: 18px;
+  --radius-lg: 24px;
+  --radius-md: 16px;
+  --radius-sm: 14px;
+  --radius-xs: 12px;
+  --pill-radius: 999px;
+  --gap-xs: 0.25rem;
+  --gap-sm: 0.35rem;
+  --gap-md: 0.6rem;
+  --gap-lg: 0.75rem;
+  --gap-xl: 0.85rem;
+  --gap-2xl: 1rem;
+  --scroll-pad: 0.2rem;
+  --pot-width: 132px;
+  --machine-width: 152px;
+}

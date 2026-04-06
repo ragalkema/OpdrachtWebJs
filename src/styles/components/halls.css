@@ -1,0 +1,137 @@
+.hall-stage {
+  overflow: hidden;
+}
+
+.hall-header {
+  gap: var(--gap-lg);
+}
+
+.hall-card {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: var(--gap-lg);
+  min-height: 100%;
+  padding: var(--gap-xl);
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(rgba(28, 37, 32, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(28, 37, 32, 0.04) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.hall-label {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.7rem;
+  color: var(--blue);
+  border-radius: var(--pill-radius);
+  background: rgba(45, 112, 151, 0.12);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.machine-lane {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--machine-width), var(--machine-width)));
+  gap: 0.7rem;
+  align-content: start;
+  justify-content: start;
+}
+
+.machine-card {
+  width: var(--machine-width);
+  min-height: 188px;
+  padding: var(--gap-lg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-card-strong);
+}
+
+.machine-card.is-active {
+  border-color: rgba(255, 122, 0, 0.4);
+  box-shadow: 0 12px 28px rgba(255, 122, 0, 0.12);
+}
+
+.machine-card span,
+.machine-card strong {
+  font-size: 0.82rem;
+}
+
+.machine-meta {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.machine-card p {
+  font-size: 0.75rem;
+  line-height: 1.3;
+}
+
+.machine-body {
+  display: grid;
+  place-items: center;
+  gap: 0.45rem;
+  height: 84px;
+  margin: 0.55rem 0;
+  border-radius: var(--radius-md);
+  background: linear-gradient(180deg, rgba(45, 112, 151, 0.14), rgba(77, 143, 90, 0.14));
+}
+
+.spinner {
+  width: 38px;
+  height: 38px;
+  border: 6px solid var(--line);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 3s linear infinite;
+  animation-play-state: paused;
+}
+
+.spinner.is-running {
+  animation-play-state: running;
+}
+
+.machine-drop {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 32px;
+  padding-inline: 0.35rem;
+  border: 1px dashed var(--line-soft);
+  border-radius: var(--radius-xs);
+  background: rgba(255, 255, 255, 0.64);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.hall-output {
+  margin-top: 0;
+}
+
+.output-lane {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.8rem;
+}
+
+.output-pot {
+  text-align: center;
+}
+
+.output-color {
+  height: 32px;
+  border-radius: var(--radius-xs);
+  background: var(--output-color);
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
